@@ -6,7 +6,7 @@ onready var starnamelabel = $gui/starname
 onready var coordlabel = $gui/coords
 onready var solarsystem = preload("res://scenes/solarsystem.tscn")
 onready var minimapsection = get_node("/root/main/gui/minimap/minimapsection")
-onready var landedmenu = preload("res://scenes/landedmenu.tscn")
+#onready var landedmenu = preload("res://scenes/landedmenu.tscn")
 onready var universescene = preload("res://scenes/Universe.tscn")
 var globeview
 var camerafollow = 1
@@ -32,7 +32,8 @@ func _ready():
 
 
 func _openlandedmenu(planetchoice):
-	var p = landedmenu.instance()
+	pass #temporary 
+	"""var p = landedmenu.instance()
 	p.currentplanet = planetchoice.get_parent().get_parent()
 	var noisetex = NoiseTexture.new()
 	noisetex.set_size(Vector2(1100, 700))
@@ -65,7 +66,7 @@ func _openlandedmenu(planetchoice):
 	globeview.z_index = 2
 	$gui/ColorRect.show()
 	add_child(globeview)
-	get_tree().paused = true
+	get_tree().paused = true"""
 	
 func _closelandedmenu():
 	globeview.queue_free()
