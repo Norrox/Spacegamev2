@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/landedmenu.gd" type="Script" id=1]
+[ext_resource path="res://art/Drawing.png" type="Texture" id=2]
+
+[sub_resource type="SimplexNoise" id=1]
+
+resource_local_to_scene = true
+seed = 5000
+octaves = 6
+period = 62.3
+persistence = 0.901
+lacunarity = 4.0
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="NoiseTexture" id=2]
+
+resource_local_to_scene = true
+flags = 7
+size = Vector2( 1100, 700 )
+seamless = true
+as_normalmap = false
+noise = SubResource( 1 )
+_sections_unfolded = [ "Flags", "Resource" ]
+
+[node name="landedmenu" type="Node2D"]
+pause_mode = 2
+script = ExtResource( 1 )
+_sections_unfolded = [ "Material", "Pause", "Transform", "material" ]
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = SubResource( 2 )
+centered = false
+_sections_unfolded = [ "Material", "Offset", "Transform", "Visibility", "Z Index", "material", "texture" ]
+
+[node name="scanline" type="Sprite" parent="Sprite"]
+position = Vector2( 0, -50 )
+texture = ExtResource( 2 )
+centered = false
+_sections_unfolded = [ "Offset", "Transform", "texture" ]
+
+[node name="Tween" type="Tween" parent="."]
+repeat = false
+playback_process_mode = 1
+playback_speed = 1.0
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+

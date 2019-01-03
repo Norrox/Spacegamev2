@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/exhaust.gd" type="Script" id=1]
+
+[node name="exhaust" type="Line2D"]
+points = PoolVector2Array(  )
+width = 10.0
+default_color = Color( 0.768627, 0.0196078, 0.054902, 1 )
+texture_mode = 1052819663
+sharp_limit = 2.0
+round_precision = 8
+script = ExtResource( 1 )
+_sections_unfolded = [ "Border", "Capping", "Fill" ]
+targetPath = null
+

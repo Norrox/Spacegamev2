@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://art/sprites/sheet.playerShip2_orange.atlastex" type="Texture" id=2]
+[ext_resource path="res://scenes/exhaust.tscn" type="PackedScene" id=3]
+
+[sub_resource type="PhysicsMaterial" id=1]
+
+friction = 0.0
+rough = false
+bounce = 0.0
+absorbent = false
+
+[sub_resource type="CircleShape2D" id=2]
+
+custom_solver_bias = 0.0
+radius = 12.8189
+
+[sub_resource type="CircleShape2D" id=3]
+
+custom_solver_bias = 0.0
+radius = 12.8189
+
+[sub_resource type="Gradient" id=4]
+
+offsets = PoolRealArray( 0, 0.096, 0.237, 0.404, 0.509, 0.574803, 0.632, 0.763, 0.866142, 1 )
+colors = PoolColorArray( 0.988281, 0.212326, 0.212326, 0.480667, 0.968627, 0.196078, 0.196078, 0.734824, 0.972549, 0.113725, 0.113725, 0.817686, 0.984314, 0.0235294, 0.0235294, 0.823216, 0.976563, 0.0267029, 0.0267029, 1, 0.976471, 0.137255, 0.137255, 0.77349, 0.972656, 0.296356, 0.296356, 0.679569, 0.968627, 0.321569, 0.321569, 0.580118, 0.976563, 0.461578, 0.461578, 0.839765, 1, 1, 1, 0.862745 )
+_sections_unfolded = [ "colors", "offsets" ]
+
+[node name="Player" type="RigidBody2D"]
+position = Vector2( 100, 100 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+mode = 0
+mass = 1.0
+friction = 0.0
+bounce = 0.0
+physics_material_override = SubResource( 1 )
+gravity_scale = 1.0
+custom_integrator = false
+continuous_cd = 0
+contacts_reported = 0
+contact_monitor = false
+sleeping = false
+can_sleep = true
+linear_velocity = Vector2( 0, 0 )
+linear_damp = -1.0
+angular_velocity = 0.0
+angular_damp = 5.0
+applied_torque = 2.0
+script = ExtResource( 1 )
+_sections_unfolded = [ "Angular", "Applied Forces", "Linear", "Transform" ]
+engine_thrust = 2000
+spin_thrust = 2500
+
+[node name="Position2D" type="Position2D" parent="."]
+position = Vector2( -15, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 1.5708
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Area2D" type="Area2D" parent="."]
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 3 )
+
+[node name="exhaust" parent="." instance=ExtResource( 3 )]
+show_behind_parent = true
+width = 2.0
+gradient = SubResource( 4 )
+texture_mode = 1
+_sections_unfolded = [ "Border", "Capping", "Fill", "Visibility", "gradient", "points" ]
+targetPath = NodePath("../Position2D")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

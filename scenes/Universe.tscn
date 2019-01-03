@@ -1,0 +1,106 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/World.gd" type="Script" id=1]
+[ext_resource path="res://art/sprites/line.png" type="Texture" id=2]
+
+[sub_resource type="ImageTexture" id=1]
+
+flags = 0
+storage = 0
+lossy_quality = 0.7
+flags = 0
+size = Vector2( 16, 16 )
+
+[sub_resource type="CircleShape2D" id=2]
+
+custom_solver_bias = 0.0
+radius = 6.79589
+
+[node name="universe" type="Node2D"]
+script = ExtResource( 1 )
+_sections_unfolded = [ "Script" ]
+__meta__ = {
+"_editor_icon": SubResource( 1 )
+}
+
+[node name="pointer" type="Area2D" parent="."]
+position = Vector2( 10, 10 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Collision", "Pickable", "Transform" ]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="pointer"]
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="pointer"]
+position = Vector2( -1521.54, 0 )
+scale = Vector2( 3, 0.2 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sprite2" type="Sprite" parent="pointer"]
+position = Vector2( 1517.37, 0 )
+scale = Vector2( 3, 0.2 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sprite3" type="Sprite" parent="pointer"]
+position = Vector2( 0, -1520.23 )
+rotation = 1.5708
+scale = Vector2( 3, 0.2 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sprite4" type="Sprite" parent="pointer"]
+position = Vector2( 0, 1517.69 )
+rotation = 1.5708
+scale = Vector2( 3, 0.2 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Polygon2D" type="Polygon2D" parent="pointer"]
+polygon = PoolVector2Array( -2, -2, 2, -2, 2, 2, -2, 2 )
+uv = PoolVector2Array(  )
+splits = PoolIntArray(  )
+color = Color( 1, 1, 1, 1 )
+vertex_colors = PoolColorArray(  )
+offset = Vector2( 0, 0 )
+antialiased = true
+texture = null
+texture_offset = Vector2( 0, 0 )
+texture_scale = Vector2( 1, 1 )
+texture_rotation_degrees = 0.0
+skeleton = NodePath("")
+invert_enable = true
+invert_border = 2.0
+bones = [  ]
+_sections_unfolded = [ "Invert", "polygon" ]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PoolVector2Array( 1, 1, 1099, 1, 1099, 699, 1, 699 )
+uv = PoolVector2Array(  )
+splits = PoolIntArray(  )
+color = Color( 1, 1, 1, 1 )
+vertex_colors = PoolColorArray(  )
+offset = Vector2( 0, 0 )
+antialiased = true
+texture = null
+texture_offset = Vector2( 0, 0 )
+texture_scale = Vector2( 1, 1 )
+texture_rotation_degrees = 0.0
+skeleton = NodePath("")
+invert_enable = true
+invert_border = 1.0
+bones = [  ]
+_sections_unfolded = [ "Invert", "polygon" ]
+
+[connection signal="area_entered" from="pointer" to="." method="_on_pointer_area_entered"]
+[connection signal="area_exited" from="pointer" to="." method="_on_pointer_area_exited"]

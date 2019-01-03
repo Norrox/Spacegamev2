@@ -1,0 +1,88 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/startscreen.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+
+code = "shader_type canvas_item;
+
+// http://www.fractalforums.com/new-theories-and-research/very-simple-formula-for-fractal-patterns/
+float field(in vec3 p) {
+	float strength = 7. + .03 * log(1.e-6 + fract(sin(1.5) * 4373.11));
+	float accum = 0.;
+	float prev = 0.;
+	float tw = 0.;
+	for (int i = 0; i < 32; ++i) {
+		float mag = dot(p, p);
+		p = abs(p) / mag + vec3(-.5, -.4, -1.5);
+		float w = exp(-float(i) / 7.);
+		accum += w * exp(-strength * pow(abs(mag - prev), 2.3));
+		tw += w;
+		prev = mag;
+	}
+	return max(0., 5. * accum / tw - .7);
+}
+
+void fragment() {
+	vec2 uv = 2.0 * FRAGCOORD.xy / vec2(1300, 700) - 1.;
+	vec2 uvs = uv * vec2(1300, 700) / max(1300, 700);
+	vec3 p = vec3(uvs / 4.0, 0) + vec3(1., -1.3, 0.);
+	p += .2 * vec3(sin(TIME / 16.), sin(TIME / 12.),  sin(TIME / 128.));
+	float t = field(p);
+	float v = (1. - exp((abs(uv.x) - 1.) * 6.)) * (1.0 - exp((abs(uv.y) - 1.0) * 6.));
+	COLOR = mix(.4, 1., v) * vec4(1.8 * t * t * t, 1.4 * t * t, t, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+
+render_priority = 0
+shader = SubResource( 1 )
+_sections_unfolded = [ "shader" ]
+
+[node name="startscreen" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 607.0
+margin_top = 308.0
+margin_right = 729.0
+margin_bottom = 339.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_colors/font_color = Color( 0.980392, 0.972549, 0.972549, 1 )
+custom_colors/font_outline_modulate = Color( 0.027451, 0.027451, 0.027451, 1 )
+text = "Press Enter to start
+"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "Margin", "custom_colors", "custom_fonts" ]
+
+[node name="ColorRect" type="ColorRect" parent="Label"]
+show_behind_parent = true
+material = SubResource( 2 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -607.0
+margin_top = -308.0
+margin_right = 693.0
+margin_bottom = 392.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Margin", "Material", "Visibility", "material" ]
+

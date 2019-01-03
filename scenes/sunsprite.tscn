@@ -1,0 +1,150 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://art/suns/sunframes/greystone003x500.png" type="Texture" id=1]
+[ext_resource path="res://scripts/sunsprite.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=1]
+
+code = "shader_type canvas_item;
+uniform vec3 s = vec3(1.0, 100.0, 10000.0);
+uniform vec3 suncolor = vec3( 0.8, 0.65, 0.3 );
+uniform vec3 secondsuncolor = vec3( 0.8, 0.35, 0.1 );
+
+
+float snoise(vec3 uv, float res)
+{
+	uv *= res;
+	vec3 uv0 = floor(mod(uv, res))*s;
+	vec3 uv1 = floor(mod(uv+vec3(1.0), res))*s;
+	
+	vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
+	
+	vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
+		      	  uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
+	
+	///vec4 r = fract(sin(v*0.001)*10000.0);
+	vec4 r = fract(sin(v*1.0)*1.0);
+	float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+	
+	///r = fract(sin((v + uv1.z - uv0.z)*0.001)*10000.0);
+	r = fract(sin((v + uv1.z - uv0.z)*1.0)*1.0);
+	float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+	
+	return mix(r0, r1, f.z)*2.-1.;
+}
+
+
+void fragment(){
+	float freqs = texture(TEXTURE, vec2( 0.01, 0.25 )).x;
+	float freqs1 = texture(TEXTURE, vec2( 0.07, 0.25 )).x;
+	float freqs2 = texture(TEXTURE, vec2( 0.15, 0.25 )).x;
+	float freqs3 = texture(TEXTURE, vec2( 0.30, 0.25 )).x;
+
+	float brightness	= freqs1 * 0.25 + freqs2 * 0.25;
+	float radius		= 0.24 + brightness * 0.2;
+	float invRadius 	= 1.0/radius;
+	
+	vec3 orange			= suncolor;
+	vec3 orangeRed		= secondsuncolor;
+	float time		= TIME * 0.1;
+	float aspect	= 1.0/1.0;
+	vec2 uv			= UV.xy / 1.0;
+	vec2 p 			= -0.5 + uv;
+	p.x *= aspect;
+
+	float fade		= pow( length( 2.0 * p ), 0.5 );
+	float fVal1		= 1.0 - fade;
+	float fVal2		= 1.0 - fade;
+	
+	float angle		= atan( p.x, p.y )/6.2832;
+	float dist		= length(p);
+	vec3 coord		= vec3( angle, dist, time * 0.1 );
+	
+	float newTime1	= abs( snoise( coord + vec3( 0.0, -time * ( 0.35 + brightness * 0.001 ), time * 0.015 ), 15.0 ) );
+	float newTime2	= abs( snoise( coord + vec3( 0.0, -time * ( 0.15 + brightness * 0.001 ), time * 0.015 ), 45.0 ) );	
+	for( int i=1; i<=7; i++ ){
+		float power = pow( 2.0, float(i + 1) );
+		fVal1 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.2 ), ( power * ( 10.0 ) * ( newTime1 + 1.0 ) ) );
+		fVal2 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.2 ), ( power * ( 25.0 ) * ( newTime2 + 1.0 ) ) );
+	}
+	
+	///float corona		= pow( fVal1 * max( 1.1 - fade, 0.0 ), 2.0 ) * 50.0;
+	///corona				+= pow( fVal2 * max( 1.1 - fade, 0.0 ), 2.0 ) * 50.0;
+	///corona				*= 1.2 - newTime1;
+	vec3 sphereNormal 	= vec3( 0.0, 0.0, 1.0 );
+	vec3 dir 			= vec3( 0.0 );
+	vec3 center			= vec3( 0.5, 0.5, 1.0 );
+	vec3 starSphere		= vec3( 0.0 );
+	
+	vec2 sp = -1.0 + 2.0 * uv;
+	sp.x *= aspect;
+	sp *= ( 2.0 - brightness );
+  	float r = dot(sp,sp);
+	float f = (1.0-sqrt(abs(1.0-r)))/(r) + brightness * 0.5;
+	if( dist < radius ){
+		///corona			*= pow( dist * invRadius, 24.0 );
+  		vec2 newUv;
+ 		newUv.x = sp.x*f;
+  		newUv.y = sp.y*f;
+		newUv += vec2( time, 0.0 );
+		
+		vec3 texSample 	= texture( TEXTURE, newUv ).rgb;
+		float uOff		= ( texSample.g * brightness * 4.5 + time );
+		vec2 starUV		= newUv + vec2( uOff, 0.0 );
+		starSphere		= texture( TEXTURE, starUV ).rgb;
+	}
+	vec2 circle = (UV - 0.5) * 0.75;
+	float circleradius = length(circle);
+	float starGlow	= min( max( 1.0 - dist * ( 1.0 - brightness ), 0.0 ), 1.0 );
+	float outside = 0.0;
+	///COLOR.rgb	= vec3( f * ( 0.75 + brightness * 0.3 ) * orange ) + starSphere + corona * orange + starGlow * orangeRed;
+	COLOR.rgb	= vec3( f * ( 0.75 + brightness * 0.3 ) * orange ) + starSphere * orange + starGlow * orangeRed;
+	if (circleradius > 0.2)
+	{
+		COLOR.a = 1.0 - (circleradius * 2.8);
+	}
+	else
+	{
+		COLOR.a = 1.0;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource( 1 )
+shader_param/s = Vector3( 1, 100, 10000 )
+shader_param/suncolor = Vector3( 0.972, 0.666, 0.227 )
+shader_param/secondsuncolor = Vector3( 1, 0.35, 0 )
+_sections_unfolded = [ "Resource", "shader", "shader_param" ]
+
+[sub_resource type="CircleShape2D" id=3]
+
+custom_solver_bias = 0.0
+radius = 9847.81
+
+[node name="sunsprite" type="Sprite"]
+material = SubResource( 2 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Material", "Transform", "Visibility", "frames", "material", "texture" ]
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+input_pickable = true
+space_override = 1
+gravity_point = true
+gravity_distance_scale = 0.000885108
+gravity_vec = Vector2( 0, 1 )
+gravity = 100.0
+linear_damp = 0.0
+angular_damp = 0.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+shape = SubResource( 3 )
+_sections_unfolded = [ "Transform" ]
+

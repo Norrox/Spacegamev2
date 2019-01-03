@@ -1,0 +1,223 @@
+[gd_scene load_steps=7 format=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Node2D
+
+var common = 0
+var metal = 0
+var uncommon = 0 
+var precious = 0
+var radioactive = 0
+var exotic = 0
+var resourcesizelist = []
+var resourcelocationlist = []
+var resourcetypelist = []
+var totalminerals = 0
+var objecttype = \"planet\"
+var planettemperature = 0
+var planethabitable = false
+var rockyorgassy = \"gassy\"
+var gravity
+var planetradius = 0
+var planetname = \"\"
+var orbitradius = 0
+var currentangle = 0
+var landingvariability = 5
+var resourcesscanned = false
+var ignoreflag = 0
+var seed1 = 0
+var period = 0
+var lacunarity = 0
+var persistence = 0
+var colorchoice = Color(1.0, 1.0, 1.0)
+var innerR
+var innerG
+var innerB
+var outerR
+var outerG
+var outerB
+var centrevec
+var shaderalpha
+var newmat
+var sealevel
+
+
+func _ready():
+	pass
+	
+	"
+
+[sub_resource type="CircleShape2D" id=2]
+
+custom_solver_bias = 0.0
+radius = 274.156
+
+[sub_resource type="Shader" id=3]
+
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+uniform float seed1 : hint_range(2.0, 50000);
+uniform float sealevel : hint_range(-0.1, 0.35);
+varying vec2 v_texCoord;
+uniform vec2 center = vec2(0.5, 0.5);
+uniform float innerEdge = 0.5;
+uniform float outerEdge = 0.5;
+uniform float alpha = 1.0;
+uniform sampler2D s_texture;
+uniform float innerR : hint_range(0.1, 5.0);
+uniform float innerG : hint_range(0.1, 5.0);
+uniform float innerB : hint_range(0.1, 5.0);
+uniform float outerR : hint_range(0.1, 5.0);
+uniform float outerG : hint_range(0.1, 5.0);
+uniform float outerB : hint_range(0.1, 5.0);
+uniform float PI = 3.141592653589793238462643383;
+uniform vec3 lightDir = vec3(-0.8, -0.8, 0.5);
+
+vec3 hash( vec3 p ) {
+  p = vec3( dot(p,vec3(127.1, 311.7, 74.7)),
+            dot(p,vec3(269.5, 183.3, 246.1)),
+            dot(p,vec3(113.5, 271.9, 124.6)));
+
+  return -1.0 + 2.0 * fract(sin(p) * seed1);
+}
+
+// return value noise (in x) and its derivatives (in yzw)
+vec4 noised( in vec3 x ) {
+  // grid
+  vec3 p = floor(x);
+  vec3 w = fract(x);
+
+  // quintic interpolant
+  vec3 u = w * w * w * (w * (w * 6.0 - 15.0) + 10.0);
+  vec3 du = 30.0 * w * w * (w * (w - 2.0) + 1.0);
+
+  // gradients
+  vec3 ga = hash( p + vec3(0.0, 0.0, 0.0) );
+  vec3 gb = hash( p + vec3(1.0, 0.0, 0.0) );
+  vec3 gc = hash( p + vec3(0.0, 1.0, 0.0) );
+  vec3 gd = hash( p + vec3(1.0, 1.0, 0.0) );
+  vec3 ge = hash( p + vec3(0.0, 0.0, 1.0) );
+  vec3 gf = hash( p + vec3(1.0, 0.0, 1.0) );
+  vec3 gg = hash( p + vec3(0.0, 1.0, 1.0) );
+  vec3 gh = hash( p + vec3(1.0, 1.0, 1.0) );
+
+  // projections
+  float va = dot( ga, w - vec3(0.0, 0.0, 0.0) );
+  float vb = dot( gb, w - vec3(1.0, 0.0, 0.0) );
+  float vc = dot( gc, w - vec3(0.0, 1.0, 0.0) );
+  float vd = dot( gd, w - vec3(1.0, 1.0, 0.0) );
+  float ve = dot( ge, w - vec3(0.0, 0.0, 1.0) );
+  float vf = dot( gf, w - vec3(1.0, 0.0, 1.0) );
+  float vg = dot( gg, w - vec3(0.0, 1.0, 1.0) );
+  float vh = dot( gh, w - vec3(1.0, 1.0, 1.0) );
+
+  // interpolations
+  return vec4( va + u.x*(vb-va) + u.y*(vc-va) + u.z*(ve-va) + u.x*u.y*(va-vb-vc+vd) + u.y*u.z*(va-vc-ve+vg) + u.z*u.x*(va-vb-ve+vf) + (-va+vb+vc-vd+ve-vf-vg+vh)*u.x*u.y*u.z,    // value
+               ga + u.x*(gb-ga) + u.y*(gc-ga) + u.z*(ge-ga) + u.x*u.y*(ga-gb-gc+gd) + u.y*u.z*(ga-gc-ge+gg) + u.z*u.x*(ga-gb-ge+gf) + (-ga+gb+gc-gd+ge-gf-gg+gh)*u.x*u.y*u.z +   // derivatives
+               du * (vec3(vb,vc,ve) - va + u.yzx*vec3(va-vb-vc+vd,va-vc-ve+vg,va-vb-ve+vf) + u.zxy*vec3(va-vb-ve+vf,va-vb-vc+vd,va-vc-ve+vg) + u.yzx*u.zxy*(-va+vb+vc-vd+ve-vf-vg+vh) ));
+}
+
+
+
+void fragment() {
+	float theta = UV.y * 3.14159;
+	float phi = UV.x * 3.14159 * 0.0;
+	vec3 unit = vec3(0.0, 0.0, 0.0);
+	
+	unit.x = sin(phi) * sin(theta);
+	unit.y = cos(theta) * -1.0;
+	unit.z = cos(phi) * sin(theta);
+	unit = normalize(unit);
+	vec4 n = noised(unit * 5.0) * 0.5;
+	n += noised(unit * 10.0) * 0.25;
+	n += noised(unit * 20.0) * 0.125;
+	n += noised(unit * 40.0) * 0.0625;
+		///COLOR.a = 0.3 + 0.7 * smoothstep(-0.1, 0.0, n.x);
+	vec2 circle = (UV - 0.5) * 2.0;
+	float rot = TIME / 30.0;
+	float radius = length(circle);
+	vec3 normal = vec3(circle.x, circle.y, sqrt(1.0 - circle.x*circle.x - circle.y*circle.y));
+	vec3 l = normalize(lightDir);
+	float ndotl = max(0.0, dot(normal, l));
+	vec3 curr_color = texture(TEXTURE,UV).xyz;
+	float R = curr_color.r;
+	float G = curr_color.g;
+	float B = curr_color.b;
+	vec3 mymix = mix(vec3((R - n.y) + innerR, (G - n.y) + innerG, (B - n.y) + innerB), vec3((R - n.x) + outerR, (G - n.x) + outerG, (B - n.x) + outerB), smoothstep(-0.01, 0.0, n.x - sealevel));
+	vec2 texCoords = vec2(0.5 + atan(normal.x, normal.z) / (2.0*PI) + rot, asin(normal.y) / PI - 0.5);
+	vec3 texColor = texture(TEXTURE, texCoords).xyz;
+	vec3 lightColor = vec3(ndotl) * texColor * mymix * 1.5;
+	vec4 inside = vec4(lightColor, 1.0);
+	vec4 outside = vec4(0.0, 0.0, 0.0, 0.0);
+	COLOR.rgba = radius <= 1.0? inside: outside;
+}
+
+
+"
+
+[sub_resource type="ShaderMaterial" id=4]
+
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource( 3 )
+shader_param/seed1 = 22345.9
+shader_param/sealevel = 0.006
+shader_param/center = Vector2( 0.5, 0.5 )
+shader_param/innerEdge = 0.5
+shader_param/outerEdge = 0.5
+shader_param/alpha = 1.0
+shader_param/innerR = 0.1
+shader_param/innerG = 0.53
+shader_param/innerB = 0.573
+shader_param/outerR = 4.739
+shader_param/outerG = 3.964
+shader_param/outerB = 1.057
+shader_param/PI = 3.142
+shader_param/lightDir = Vector3( -0.8, -0.8, 0.5 )
+_sections_unfolded = [ "Resource", "shader", "shader_param", "shader_param/texture1" ]
+
+[sub_resource type="SimplexNoise" id=5]
+
+seed = 2000
+octaves = 6
+period = 0.1
+persistence = 1.0
+lacunarity = 4.0
+
+[sub_resource type="NoiseTexture" id=6]
+
+flags = 7
+size = Vector2( 200, 200 )
+seamless = true
+as_normalmap = false
+noise = SubResource( 5 )
+_sections_unfolded = [ "Flags", "noise" ]
+
+[node name="planet" type="Node2D"]
+script = SubResource( 1 )
+_sections_unfolded = [ "Script", "Transform" ]
+
+[node name="gravity" type="Area2D" parent="."]
+input_pickable = true
+space_override = 1
+gravity_point = true
+gravity_distance_scale = 0.000885108
+gravity_vec = Vector2( 0, 1 )
+gravity = 100.0
+linear_damp = 0.0
+angular_damp = 0.0
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Collision", "Pickable" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="gravity"]
+visible = false
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 1, 0.992157, 0.992157, 1 )
+material = SubResource( 4 )
+texture = SubResource( 6 )
+_sections_unfolded = [ "Animation", "Material", "Offset", "Transform", "material", "normal_map", "texture" ]
+
