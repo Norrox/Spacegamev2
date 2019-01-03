@@ -177,7 +177,7 @@ shader_param/PI = 3.142
 shader_param/lightDir = Vector3( -0.8, -0.8, 0.5 )
 _sections_unfolded = [ "Resource", "shader", "shader_param", "shader_param/texture1" ]
 
-[sub_resource type="SimplexNoise" id=5]
+[sub_resource type="OpenSimplexNoise" id=5]
 
 seed = 2000
 octaves = 6

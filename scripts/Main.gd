@@ -6,7 +6,7 @@ onready var starnamelabel = $gui/starname
 onready var coordlabel = $gui/coords
 onready var solarsystem = preload("res://scenes/solarsystem.tscn")
 onready var minimapsection = get_node("/root/main/gui/minimap/minimapsection")
-#onready var landedmenu = preload("res://scenes/landedmenu.tscn")
+onready var landedmenu = preload("res://scenes/landedmenu.tscn")
 onready var universescene = preload("res://scenes/Universe.tscn")
 var globeview
 var camerafollow = 1
@@ -32,13 +32,13 @@ func _ready():
 
 
 func _openlandedmenu(planetchoice):
-	pass #temporary 
-	"""var p = landedmenu.instance()
+	var p = landedmenu.instance()
 	p.currentplanet = planetchoice.get_parent().get_parent()
 	var noisetex = NoiseTexture.new()
-	noisetex.set_size(Vector2(1100, 700))
+	noisetex.set_height(700)
+	noisetex.set_width(1100)
 	noisetex.set_seamless(true)
-	var simplenoise = SimplexNoise.new()
+	var simplenoise = OpenSimplexNoise.new()
 	simplenoise.seed = p.currentplanet.seed1
 	simplenoise.period = p.currentplanet.period
 	simplenoise.persistence = p.currentplanet.persistence
@@ -66,7 +66,7 @@ func _openlandedmenu(planetchoice):
 	globeview.z_index = 2
 	$gui/ColorRect.show()
 	add_child(globeview)
-	get_tree().paused = true"""
+	get_tree().paused = true
 	
 func _closelandedmenu():
 	globeview.queue_free()
@@ -208,10 +208,10 @@ func createsystem(namechoice):
 		var planetradius = 0
 		if rockyorgassy == 2 or rockyorgassy == 1:
 			rockyorgassy = "rocky"
-			planetradius = randf()*0.6 + 0.3
+			planetradius = randf()*0.2 + 0.1
 		elif rockyorgassy == 3:
 			rockyorgassy = "gassy"
-			planetradius = randf()*0.8 + 1.2
+			planetradius = randf()*0.275 + 0.4
 		var planethabitable = false
 		if rockyorgassy == "rocky":
 			if planettemperature > 240:
