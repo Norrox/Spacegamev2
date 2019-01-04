@@ -62,7 +62,7 @@ func _openlandedmenu(planetchoice):
 	globeview.position = Vector2(1200, 635)
 	var globesize = globeview.texture.get_size()
 	if globesize.x > 200 or globesize.y > 125:
-		globeview.scale = Vector2(globeview.scale.x * 0.4, globeview.scale.y * 0.4)
+		globeview.scale = Vector2(globeview.scale.x * 0.45, globeview.scale.y * 0.45)
 	globeview.z_index = 2
 	$gui/ColorRect.show()
 	add_child(globeview)

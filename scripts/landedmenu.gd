@@ -118,6 +118,12 @@ func _process(delta):
 					radioactiveamount += x.resourcesize
 				elif x.resourcegroup == 6:
 					exoticamount += x.resourcesize
+				currentplanet.common = commonamount
+				currentplanet.metal = metalamount
+				currentplanet.uncommon = uncommonamount
+				currentplanet.precious = preciousamount
+				currentplanet.radioactive = radioactiveamount
+				currentplanet.exotic = exoticamount
 				var commonstring = str("common: " + str(commonamount))
 				get_parent().get_node("gui/common").set_text(commonstring)
 				var exoticstring = str("exotics: " + str(exoticamount))
@@ -142,8 +148,8 @@ func _leave():
 	get_parent()._closelandedmenu()
 	
 func _distributeminerals(planet):
+	currentplanet = planet
 	var p
-	print(planet.resourcelocationlist)
 	for x in range(0, planet.resourcelocationlist.size(), 1):
 		p = resourcedot.instance()
 		p.resourcegroup = planet.resourcetypelist[x]
@@ -166,8 +172,27 @@ func _distributeminerals(planet):
 		elif p.resourcegroup == 6:
 			p.get_node("Sprite").set_texture(exoticicon)
 		resourcelist.append(p)
-		if planet.resourcesscanned == false:
-			p.hide()
+		p.hide()
 		p.position.x = planet.resourcelocationlist[x].x
 		p.position.y = planet.resourcelocationlist[x].y
 
+
+
+func _on_Tween_tween_completed(object, key):
+	if currentplanet.resourcesscanned == true:
+		for p in resourcelist:
+			p.show()
+		var commonstring = str("common: " + str(currentplanet.common))
+		get_parent().get_node("gui/common").set_text(commonstring)
+		var exoticstring = str("exotics: " + str(currentplanet.exotic))
+		get_parent().get_node("gui/exotic").set_text(exoticstring)
+		var metalstring = str("metals: " + str(currentplanet.metal))
+		get_parent().get_node("gui/metals").set_text(metalstring)
+		var uncommonstring = str("uncommon: " + str(currentplanet.uncommon))
+		get_parent().get_node("gui/uncommon").set_text(uncommonstring)
+		var preciousstring = str("precious: " + str(currentplanet.precious))
+		get_parent().get_node("gui/precious").set_text(preciousstring)
+		var radioactivestring = str("radioactives: " + str(currentplanet.radioactive))
+		get_parent().get_node("gui/radioactive").set_text(radioactivestring)
+		
+	

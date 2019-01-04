@@ -176,8 +176,8 @@ func _generatesystem(systemdict):
 		mat.set_shader_param("suncolor", Vector3(0.9, 0.9, 0.9))
 		mat.set_shader_param("secondsuncolor", Vector3(0.8, 0.8, 0.8))
 	sunsprite.scale = Vector2(systemdict["sunsize"] * 1.2, systemdict["sunsize"] * 1.2)
-	sunsprite.position.x = systemdict["sunpositionx"]
-	sunsprite.position.y = systemdict["sunpositiony"]
+	sunsprite.position.x = 0
+	sunsprite.position.y = 0
 	sunsprite.suntemperature = systemdict["suntemperature"]
 	sunsprite.suntype = systemdict["suntype"]
 	sunsprite.sunsize = systemdict["sunsize"]

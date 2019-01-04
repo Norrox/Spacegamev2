@@ -112,39 +112,30 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=2]
 
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource( 1 )
 shader_param/s = Vector3( 1, 100, 10000 )
 shader_param/suncolor = Vector3( 0.972, 0.666, 0.227 )
 shader_param/secondsuncolor = Vector3( 1, 0.35, 0 )
-_sections_unfolded = [ "Resource", "shader", "shader_param" ]
 
 [sub_resource type="CircleShape2D" id=3]
 
-custom_solver_bias = 0.0
 radius = 9847.81
 
 [node name="sunsprite" type="Sprite"]
 material = SubResource( 2 )
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
-_sections_unfolded = [ "Material", "Transform", "Visibility", "frames", "material", "texture" ]
 
 [node name="Area2D" type="Area2D" parent="."]
 visible = false
-input_pickable = true
 space_override = 1
 gravity_point = true
 gravity_distance_scale = 0.000885108
-gravity_vec = Vector2( 0, 1 )
 gravity = 100.0
 linear_damp = 0.0
 angular_damp = 0.0
-audio_bus_override = false
-audio_bus_name = "Master"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 visible = false
 shape = SubResource( 3 )
-_sections_unfolded = [ "Transform" ]
 

@@ -27,10 +27,6 @@ config/icon="res://icon.png"
 
 globals="*res://scripts/globals.gd"
 
-[debug]
-
-settings/fps/force_fps=60
-
 [display]
 
 window/size/width=1302
@@ -171,6 +167,8 @@ threads/thread_model=2
 quality/filters/anisotropic_filter_level=1
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
+quality/shading/force_vertex_shading=true
+quality/filters/use_nearest_mipmap_filter=true
 quality/subsurface_scattering/quality=0
 quality/voxel_cone_tracing/high_quality=false
 environment/default_clear_color=Color( 0, 0, 0, 1 )
