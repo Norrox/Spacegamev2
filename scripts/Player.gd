@@ -1,7 +1,7 @@
 extends RigidBody2D
 
-export (int) var engine_thrust
-export (int) var spin_thrust
+export (int) var enginethrust
+export (int) var spinthrust
 
 var thrust = Vector2()
 var rotation_dir = 0
@@ -9,37 +9,32 @@ var screensize
 var max_speed = 500
 var exhaust_length = 0
 var max_exhaust_length = 10
-
+var max_speed_vector = Vector2(500, 500)
+var thrustmulti = 1
 
 func _ready():
 	screensize = get_viewport().get_visible_rect().size
 
-func get_input():
-	if Input.is_action_pressed("player_thrust"):
-		thrust = Vector2(engine_thrust, 0)
-		if exhaust_length < max_exhaust_length:
-			exhaust_length += 1
-	else:
-		if exhaust_length > 0:
-			exhaust_length -= 1
-		thrust = Vector2()
-	rotation_dir = 0
-	if Input.is_action_pressed("player_right"):
-		rotation_dir += 1
-	if Input.is_action_pressed("player_left"):
-		rotation_dir -= 1
-
-func _physics_process(delta):
-	get_input()
-	if abs(get_linear_velocity().x) > max_speed or abs(get_linear_velocity().y) > max_speed:
-		var new_speed = get_linear_velocity().normalized()
-		new_speed *= max_speed
-		set_linear_velocity(new_speed)
 
 func _integrate_forces(state):
-	
-	set_applied_force(thrust.rotated(rotation))
-	set_applied_torque(rotation_dir * spin_thrust)
+	var currentvel = sqrt(pow(abs(get_linear_velocity().x), 2) + pow(abs(get_linear_velocity().y), 2))
+	if Input.is_action_pressed("player_thrust"):
+		if exhaust_length < max_exhaust_length:
+			exhaust_length += 1
+		set_applied_force(Vector2(enginethrust,0).rotated(rotation))
+		var oppositetravel = Vector2(get_linear_velocity().x * -1, get_linear_velocity().y * -1)
+		oppositetravel = oppositetravel * (currentvel / max_speed)
+		add_force(Vector2(0,0), oppositetravel)
+	else:
+		set_applied_force(Vector2())
+		if exhaust_length > 0:
+			exhaust_length -= 1
+	rotation_dir = 0
+	if Input.is_action_pressed("ui_right"):
+		rotation_dir += 1
+	if Input.is_action_pressed("ui_left"):
+		rotation_dir -= 1
+	set_applied_torque(rotation_dir * spinthrust)
 	var xform = state.transform
 	if xform.origin.x > 10000:
 		xform.origin.x = 0
@@ -50,7 +45,6 @@ func _integrate_forces(state):
 	if xform.origin.y < 0:
 		xform.origin.y = 6250
 	state.transform = xform
-	
 
 
 func _on_Area2D_area_entered(area):

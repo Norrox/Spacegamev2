@@ -62,7 +62,7 @@ func _openlandedmenu(planetchoice):
 	globeview.position = Vector2(1200, 635)
 	var globesize = globeview.texture.get_size()
 	if globesize.x > 200 or globesize.y > 125:
-		globeview.scale = Vector2(0.59, 0.59)
+		globeview.scale = Vector2(globeview.scale.x * 0.4, globeview.scale.y * 0.4)
 	globeview.z_index = 2
 	$gui/ColorRect.show()
 	add_child(globeview)
@@ -208,10 +208,10 @@ func createsystem(namechoice):
 		var planetradius = 0
 		if rockyorgassy == 2 or rockyorgassy == 1:
 			rockyorgassy = "rocky"
-			planetradius = randf()*0.2 + 0.1
+			planetradius = randf()*0.3 + 0.2
 		elif rockyorgassy == 3:
 			rockyorgassy = "gassy"
-			planetradius = randf()*0.275 + 0.4
+			planetradius = randf()*0.475 + 0.4
 		var planethabitable = false
 		if rockyorgassy == "rocky":
 			if planettemperature > 240:
