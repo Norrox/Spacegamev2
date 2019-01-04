@@ -3,14 +3,12 @@ extends RigidBody2D
 export (int) var enginethrust
 export (int) var spinthrust
 
-var thrust = Vector2()
 var rotation_dir = 0
 var screensize
 var max_speed = 500
 var exhaust_length = 0
 var max_exhaust_length = 10
-var max_speed_vector = Vector2(500, 500)
-var thrustmulti = 1
+
 
 func _ready():
 	screensize = get_viewport().get_visible_rect().size
