@@ -220,9 +220,9 @@ func createsystem(namechoice):
 					if ishabitable == 1:
 						planethabitable = true
 		var seed1 = randi()% 5000
-		var period = randi() % 74 + 6
-		var persistence = randf()*0.5+0.5
-		var lacunarity = randf()*3.4 + 1.6
+		var period = randi() % 226 + 30
+		var persistence = randf()*0.6+0.4
+		var lacunarity = randf()*3.4 + 0.6
 		var resourceheatmultiplier = planettemperature / 273
 		var resourcesizemultiplier = resourceheatmultiplier
 		var totalresources = resourcesizemultiplier * (randi()%200)
