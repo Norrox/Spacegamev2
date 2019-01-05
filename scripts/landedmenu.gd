@@ -23,9 +23,9 @@ onready var scanline = $Sprite/scanline
 var scanlinegroup = []
 var freezecontrols = false
 var scanbool = false
-# Called when the node enters the scene tree for the first time.
 var resourcelist = []
 func _ready():
+	#set menu selection to default, set info boxes to default
 	selection = 1
 	get_parent().get_node("gui/scan").color = Color(0.2, 0.3, 0.37)
 	get_parent().get_node("gui/land").color = Color(0.03, 0.03, 0.03)
@@ -41,10 +41,12 @@ func _ready():
 	get_parent().get_node("gui/exotic").text = "Exotic : "
 
 func _zoommap():
+	#zooms in the map when it opens as a slightly swish entrance
 	$Tween.interpolate_property($Sprite, "scale", Vector2(0,0), Vector2(1.0,1.0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Tween.start()
 
 func _input(event):
+	#controls are frozen whilst scanning, otherise move menu selection
 	if freezecontrols == false:
 		if event.is_action("ui_down") and event.is_pressed() and not event.is_echo():
 			if selection == 3:
@@ -78,6 +80,7 @@ func _input(event):
 		return
 
 func _changerectcolor():
+	#change menu selection colour based on which is currently chosen
 	if selection == 1:
 		get_parent().get_node("gui/scan").color = Color(0.2, 0.3, 0.37)
 		get_parent().get_node("gui/land").color = Color(0.03, 0.03, 0.03)
@@ -97,8 +100,11 @@ func _scan():
 	scanline.show()
 
 func _process(delta):
+	#if scan has been chosen
 	if scanbool == true:
+		#move scanline down
 		scanline.position.y += 200 * delta
+		#until reaching bottom of map, then hide it and reveal resources
 		if scanline.position.y > 700:
 			scanbool = false
 			scanline.hide()
@@ -124,6 +130,7 @@ func _process(delta):
 				currentplanet.precious = preciousamount
 				currentplanet.radioactive = radioactiveamount
 				currentplanet.exotic = exoticamount
+				#add resource totals to info panel
 				var commonstring = str("common: " + str(commonamount))
 				get_parent().get_node("gui/common").set_text(commonstring)
 				var exoticstring = str("exotics: " + str(exoticamount))
@@ -140,14 +147,17 @@ func _process(delta):
 		return
 
 func _land():
+	#todo
 	pass
 	
 func _leave():
 	currentplanet.get_node("Sprite/landing").landableplanet = false
+	#add a collisiontimer so that you cant immediately re-collide with planet after leaving
 	currentplanet.get_node("collisiontimer").start()
 	get_parent()._closelandedmenu()
 	
 func _distributeminerals(planet):
+	#called before menu visible, resources are added, but invisible until scanned
 	currentplanet = planet
 	var p
 	for x in range(0, planet.resourcelocationlist.size(), 1):
@@ -157,6 +167,7 @@ func _distributeminerals(planet):
 		var scalefactor = planet.resourcesizelist[x] / 30
 		if scalefactor < 1:
 			scalefactor = 1
+		#scale resource dots according to deposit size
 		p.scale = Vector2(0.04 * scalefactor, 0.04 * scalefactor)
 		add_child(p)
 		if p.resourcegroup == 1:
@@ -172,6 +183,7 @@ func _distributeminerals(planet):
 		elif p.resourcegroup == 6:
 			p.get_node("Sprite").set_texture(exoticicon)
 		resourcelist.append(p)
+		#hide them
 		p.hide()
 		p.position.x = planet.resourcelocationlist[x].x
 		p.position.y = planet.resourcelocationlist[x].y
@@ -179,7 +191,9 @@ func _distributeminerals(planet):
 
 
 func _on_Tween_tween_completed(object, key):
+	#if planet has already been scanned previously
 	if currentplanet.resourcesscanned == true:
+		#show previously revealed resource dots immediately and add totals to info panel
 		for p in resourcelist:
 			p.show()
 		var commonstring = str("common: " + str(currentplanet.common))

@@ -19,11 +19,15 @@ var numstars = 20
 var starlist
 
 func _process(delta):
+	#add title and fps to window for testing
 	OS.set_window_title(title + " | fps: " + str(Engine.get_frames_per_second()))
 
 func _ready():
+	#hide gui minimap - not needed yet
 	$gui/minimap.hide()
+	#populate universe database, generate all data for all systems
 	createuniverse()
+	#instance the universe view
 	var newuniverse = universescene.instance()
 	$viewportcontainer/viewport.add_child(newuniverse)
 	newuniverse._populateuniversescene()
@@ -32,8 +36,10 @@ func _ready():
 
 
 func _openlandedmenu(planetchoice):
+	#called when colliding with planet - should be moved out of main probably
 	var p = landedmenu.instance()
 	p.currentplanet = planetchoice.get_parent().get_parent()
+	#set planet map view to same noise texture as system sphere
 	var noisetex = NoiseTexture.new()
 	noisetex.set_height(700)
 	noisetex.set_width(1100)
@@ -51,13 +57,18 @@ func _openlandedmenu(planetchoice):
 	p.get_node("Sprite").texture = noisetex
 	p.get_node("Sprite/scanline").set_modulate(Color(1, 1, 1))
 	add_child(p)
+	#call landedmenu function to distribute planets assigned resources
 	p._distributeminerals(planetchoice.get_parent().get_parent())
+	#make the map zoom in as the menu appears
 	p._zoommap()
+	#show menu controls
 	$gui/scan.show()
 	$gui/land.show()
 	$gui/leave.show()
+	#set info text
 	$gui/planetname.text = str(planetchoice.get_parent().get_parent().planetname)
 	$gui/planettemp.text = "Temp: " + str(int(planetchoice.get_parent().get_parent().planettemperature)) + " K / " + str(int(planetchoice.get_parent().get_parent().planettemperature) - 273) + " C"
+	#create a view of the planet sprite sphere in bottom right
 	globeview = planetsprite.duplicate()
 	globeview.position = Vector2(1200, 635)
 	var globesize = globeview.texture.get_size()
@@ -69,6 +80,7 @@ func _openlandedmenu(planetchoice):
 	get_tree().paused = true
 	
 func _closelandedmenu():
+	#close the landed menu and reset info boxes
 	globeview.queue_free()
 	$gui/ColorRect.hide()
 	get_tree().paused = false
@@ -80,6 +92,7 @@ func _closelandedmenu():
 		x.hide()
 
 func _generatesolarsystem(starchoice):
+	#when solar system selected, instance that scene
 	$gui/minimapcentre.show()
 	var systemdict = starchoice.systemdict
 	$viewportcontainer/viewport.remove_child(currentuniverse)
@@ -92,6 +105,7 @@ func _generatesolarsystem(starchoice):
 	camera.zoom = Vector2(1.5, 1.5)
 
 func _leavesolarsystem():
+	#when solar system is exited, return to universe scene and reset info
 	$gui/minimap.hide()
 	$gui/minimapcentre.hide()
 	for x in $viewportcontainer/viewport/solarsystem/system.minimapdotlist:
@@ -106,6 +120,7 @@ func _leavesolarsystem():
 	camera.target = pointer
 
 func _input(event):
+	#control input for universe scene, shouldbe moved out of main
 	if event.is_action("zoomin") and event.is_pressed() and not event.is_echo():
 		camera.zoom = Vector2(camera.zoom.x / 1.5, camera.zoom.y / 1.5)
 		minimapsection.scale = Vector2(minimapsection.scale.x / 1.5, minimapsection.scale.y / 1.5)
@@ -119,6 +134,7 @@ func _input(event):
 			return
 
 func loadWords():
+	#json reading helper function
     var lines = []                              #set an empty array
     var file = File.new();                      #create an instance
     file.open("res://starnames.json", File.READ); #open the file into instance
@@ -130,6 +146,7 @@ func loadWords():
 
 func createsystem(namechoice):
 	randomize()
+	#create data for each system, sunsize, type, planetsize, type, temp etc
 	var sunname = namechoice
 	var sunsize = 0
 	var sizechoice = randi()%5+1
@@ -190,10 +207,11 @@ func createsystem(namechoice):
 	}
 	var acceptableradiuslist = []
 	var minradius = sunsize * 100
-	
+	#acceptable radius list - cant be too big or too small, to fit graphically on system view
 	for i in range(200 + minradius, 3000, 200):
 		acceptableradiuslist.append(i)
 	var curatedradiuslist = []
+	#make a new list that has space around each radius so planets arent too close together
 	for i in range(1, numplanets, 1):
 		var curatedradiuschoiceindex = randi() % acceptableradiuslist.size()
 		curatedradiuslist.append(acceptableradiuslist[curatedradiuschoiceindex])
@@ -288,20 +306,27 @@ func createsystem(namechoice):
 	return system_dict
 
 func createuniverse():
+	#create universe database
 	var namelist = loadWords()
 	var universefile = File.new()
 	universefile.open("res://systemdata/universe.json", File.WRITE)
+	#number of stars in universe
 	var count = numstars
+	#create dictionary to hold data
 	var systemdict = {}
 	while count > 0:
+		#iterate through and pick random names from text file of random names
 		var namechoice = namelist[randi() % namelist.size()]
+		#for each star, create system data
 		systemdict = createsystem(namechoice)
 		universefile.store_line(to_json(systemdict))
+		#remove chosen name from active list
 		namelist.erase(namechoice)
 		count -= 1
 	universefile.close()
 
 func romannumerals(number):
+	#planet naming helper function
 	if number == 1:
 		return "I"
 	elif number == 2:

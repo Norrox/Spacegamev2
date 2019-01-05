@@ -20,16 +20,19 @@ var starlist = []
 
 func _ready():
 	randomize()
+	#reset info panel for co-ords and label
 	var xstring = var2str(int(pointer.position.x))
 	var ystring = var2str(int(pointer.position.y))
 	coordlabel.set_text(xstring + ", " + ystring)
 
 func _populateuniversescene():
+	#read the universe database
 	var universefile = File.new()
 	universefile.open("res://systemdata/universe.json", File.READ)
 	while not universefile.eof_reached():
 		if parse_json(universefile.get_line()) == null:
 			return
+		#add dots for each star in database, and color and size it
 		p = sundotwhite.instance()
 		var colorchoice = Color(255, 255, 255)
 		var current_line = parse_json(universefile.get_line())
@@ -76,12 +79,14 @@ func _input(event):
 			get_node("/root/main")._generatesolarsystem(highlightedstar)
 
 func _highlightsystem(position, name):
+	# if pointer is over system, then add its name to the info panel
 	pointer.position = position
 	starnamelabel.set_text(name)
 	holdmovement = 10
 
 
 func _unhighlightsystem():
+	#remove highlighted star info
 	starnamelabel.set_text("")
 
 func _process(delta):
@@ -90,6 +95,7 @@ func _process(delta):
 
 
 func _physics_process(delta):
+	#move pointer
 	if holdmovement == 0:
 		if Input.is_action_pressed("ui_left"):
 			if pointer.position.x < 0:

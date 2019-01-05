@@ -12,13 +12,16 @@ var randx
 var randy
 
 func _ready():
+	#the exhaust starts at a point behind ship, set it here
 	target = get_node(targetPath)
 	randomize()
 	
 func _process(delta):
+	#variable exhaust length depending on engine/ship
 	traillength = get_parent().exhaust_length
 	global_position = Vector2(0, 0)
 	global_rotation = 0
+	#randomise pixel stream slightly to give jagged fiery effect
 	randx = randi() % 2
 	randy = randi() % 2
 	if randx == 0:
@@ -37,5 +40,6 @@ func _process(delta):
 	pointy = target.global_position.y + ymodifier
 	point = Vector2(pointx, pointy)
 	add_point(point)
+	#don't let go over max allowed length
 	while get_point_count() > traillength:
 		remove_point(0)

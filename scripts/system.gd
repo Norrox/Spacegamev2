@@ -22,6 +22,7 @@ var baseplanetlist = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	#put minimap rectangle of visible area in proportional position of where camera starts
 	minimapsection.position.x = (camera.get_camera_screen_center().x / 50)
 	minimapsection.position.y = (camera.get_camera_screen_center().y / 52) + 575
 	
@@ -29,10 +30,13 @@ func _process(delta):
 	minimapsection.position.x = (camera.get_camera_screen_center().x / 50)
 	minimapsection.position.y = (camera.get_camera_screen_center().y / 52) + 575
 	for x in baseplanetlist:
+		#change lighting direction shining on planet
 		var lightdirx = -0.3
 		var lightdiry = 0.0
+		#change position of planets on their orbits
 		x.position = Vector2(x.orbitradius, 0).rotated(deg2rad(x.currentangle))
 		x.currentangle += (1300 / (x.orbitradius / 1.5)) * delta
+		#wrap 360 degrees back to zero
 		if x.currentangle > 360:
 			x.currentangle = 0
 		if x.currentangle > 0 and x.currentangle < 90:
@@ -57,16 +61,21 @@ func _process(delta):
 			lightdirx = lightdirx - (anglenormalized / 300)
 			lightdiry = lightdiry - (anglenormalized / 300)
 		var mat = x.get_node("Sprite").get_material()
+		#change lighting shader parameter
 		mat.set_shader_param("lightDir", Vector3(lightdirx, lightdiry, 0.5))
 	for x in range(0, baseplanetlist.size()):
+		#change minimap dots for planets based on their updated position
 		var minimapx = (baseplanetlist[x].position.x / 50) + minimapcentre.get_global_position().x
 		var minimapy = (baseplanetlist[x].position.y / 50) + minimapcentre.get_global_position().y
 		minimapdotlist[x].position = Vector2(minimapx, minimapy)
 
 func _minimapdots():
+	#generate minimapdots
 	get_node("/root/main/gui/minimap").show()
 	minimapcentre = get_node("/root/main/gui/minimapcentre")
+	#change size of minimap dot for the sun based on the suns size
 	var centredotscale = 0.01 * (currentstar.sunsize)
+	#change colour of minimap dot based on sun type
 	if currentstar.suntype == 1:
 		minimapcentre.texture = load("res://art/suns/sunred.png")
 	elif currentstar.suntype == 2:
@@ -82,7 +91,7 @@ func _minimapdots():
 	minimapcentre.scale = Vector2(centredotscale, centredotscale)
 	var p
 	for x in baseplanetlist:
-		#circle orbits on minimap
+		#circle orbits on minimap, set their color based on planet temperature
 		if x.planettemperature > 240 and x.planettemperature < 333:
 			p = greencircle.instance()
 			circlelist.append(p)
@@ -96,6 +105,7 @@ func _minimapdots():
 			circlelist.append(p)
 			get_node("/root/main").add_child(p)
 		var y = x.orbitradius * 0.000040
+		#set initial position of planet minimap dots
 		p.position = minimapcentre.get_global_position()
 		p.scale = Vector2(y, y)
 		#add planet dots
@@ -106,10 +116,13 @@ func _minimapdots():
 		var minimapy = (x.position.y / 50) + minimapcentre.get_global_position().y
 		i.position = Vector2(minimapx, minimapy)
 		minimapdotlist.append(i)
+	#have now visited this star system
 	visited = true
 	
 func _generatesystem(systemdict):
+	#generate system, called from main
 	randomize()
+	#choose background
 	backgroundchoice = systemdict["backgroundchoice"]
 	if backgroundchoice == 1:
 		get_parent().get_node("background").texture = load("res://art/background (1).png")
@@ -153,10 +166,12 @@ func _generatesystem(systemdict):
 		get_parent().get_node("background").texture = load("res://art/background (20).png")
 	elif backgroundchoice == 21:
 		get_parent().get_node("background").texture = load("res://art/background (21).png")
+	#load the sun sprite
 	var sunsprite = load("res://scenes/sunsprite.tscn")
 	sunsprite = sunsprite.instance()
 	currentstar = sunsprite
 	var mat = sunsprite.get_material()
+	#change shader paramters based on sun type
 	if systemdict["suntype"] == 1:
 		mat.set_shader_param("suncolor", Vector3(1.0, 0.15, 0.0))
 		mat.set_shader_param("secondsuncolor", Vector3(1.0, 0.05, 0.0))
@@ -175,9 +190,12 @@ func _generatesystem(systemdict):
 	else:
 		mat.set_shader_param("suncolor", Vector3(0.9, 0.9, 0.9))
 		mat.set_shader_param("secondsuncolor", Vector3(0.8, 0.8, 0.8))
+	#change sprite size based on sun size
 	sunsprite.scale = Vector2(systemdict["sunsize"] * 1.2, systemdict["sunsize"] * 1.2)
+	# 0, 0 is centre of system
 	sunsprite.position.x = 0
 	sunsprite.position.y = 0
+	#sprite has redundant variables from the system database
 	sunsprite.suntemperature = systemdict["suntemperature"]
 	sunsprite.suntype = systemdict["suntype"]
 	sunsprite.sunsize = systemdict["sunsize"]
@@ -186,12 +204,14 @@ func _generatesystem(systemdict):
 	_generateplanets(systemdict)
 
 func _generateplanets(systemdict):
+	#generate planets
 	var habitableplanet = load("res://scenes/habitableplanet.tscn")
 	var gasgiantplanet = load("res://scenes/gasgiantplanet.tscn")
 	var nonhabitableplanet = load("res://scenes/nonhabitableplanet.tscn")
 	var count = systemdict["numplanets"]
 	var p
 	for x in range(1, count):
+		#give each planet its generated variables
 		var planetname = str(systemdict["sunname"] + romannumerals(x))
 		var planettemperaturestring = str(planetname + "planettemperature")
 		var planettemperature = systemdict[planettemperaturestring]
@@ -239,6 +259,7 @@ func _generateplanets(systemdict):
 		var outerG = systemdict[outerGstring]
 		var outerBstring = str(planetname + "outerB")
 		var outerB = systemdict[outerBstring]
+		#rocky or gas giant
 		if rockyorgassy == "rocky":
 			p = nonhabitableplanet.instance()
 		elif rockyorgassy == "gassy":
@@ -249,9 +270,12 @@ func _generateplanets(systemdict):
 		p.rockyorgassy = rockyorgassy
 		p.scale = Vector2(planetradius, planetradius)
 		p.planetradius = planetradius
+		#random point on its orbit
 		p.currentangle = randi() % 360
+		#set position
 		p.position = Vector2(p.orbitradius, 0).rotated(deg2rad(p.currentangle))
 		if p.rockyorgassy == "rocky":
+			#generate noise for basic terrain texture
 			var noise = p.get_node("Sprite").texture.get_noise()
 			noise.seed = seed1
 			noise.period = period
@@ -264,11 +288,13 @@ func _generateplanets(systemdict):
 			p.gravity = planetradius * 4
 			p.get_node("Sprite").set_modulate(Color(colorchoiceR, colorchoiceG, colorchoiceB))
 			p.colorchoice = Color(colorchoiceR, colorchoiceG, colorchoiceB)
+			#add resources to planets list of resources
 			for x in range(0, resourcelocationxlist.size(), 1):
 				p.resourcelocationlist.append(Vector2(resourcelocationxlist[x], resourcelocationylist[x]))
 			p.resourcetypelist = resourcetypelist
 			p.resourcesizelist = resourcesizelist
 		elif p.rockyorgassy == "gassy":
+			#add gas giant shader parameters
 			p.seed1 = seed1
 			p.sealevel = sealevel
 			p.innerR = innerR
@@ -286,6 +312,7 @@ func _generateplanets(systemdict):
 			mat.set_shader_param("outerR", outerR)
 			mat.set_shader_param("outerG", outerG)
 			mat.set_shader_param("outerB", outerB)
+		#name planet
 		p.set_name(planetname)
 		p.planetname = str(systemdict["sunname"] + " " + romannumerals(x))
 		baseplanetlist.append(p)
@@ -295,6 +322,7 @@ func _generateplanets(systemdict):
 
 
 func romannumerals(number):
+	#planet naming helper function
 	if number == 1:
 		return "I"
 	elif number == 2:
