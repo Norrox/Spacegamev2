@@ -94,7 +94,7 @@ shader = SubResource( 3 )
 shader_param/PI = 3.14159
 shader_param/lightDir = Vector3( 0.1, 0, 0.1 )
 
-[sub_resource type="OpenSimplexNoise" id=8]
+[sub_resource type="OpenSimplexNoise" id=5]
 
 seed = 224
 octaves = 6
@@ -102,11 +102,11 @@ period = 205.1
 persistence = 0.832
 lacunarity = 4.0
 
-[sub_resource type="NoiseTexture" id=9]
+[sub_resource type="NoiseTexture" id=6]
 
 flags = 6
 seamless = true
-noise = SubResource( 8 )
+noise = SubResource( 5 )
 
 [sub_resource type="CircleShape2D" id=7]
 
@@ -134,7 +134,7 @@ shape = SubResource( 2 )
 modulate = Color( 0.960784, 0.972549, 0.976471, 1 )
 material = SubResource( 4 )
 scale = Vector2( 0.5, 0.5 )
-texture = SubResource( 9 )
+texture = SubResource( 6 )
 
 [node name="landing" type="Area2D" parent="Sprite"]
 script = ExtResource( 1 )

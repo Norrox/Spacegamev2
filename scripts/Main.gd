@@ -15,7 +15,7 @@ var debugfunctions = true
 var firstrun
 var currentuniverse
 var universedict = {}
-var numstars = 20
+var numstars = 80
 var starlist
 
 func _process(delta):
@@ -206,7 +206,7 @@ func createsystem(namechoice):
 		"sunpositiony" : sunpositiony,
 	}
 	var acceptableradiuslist = []
-	var minradius = sunsize * 100
+	var minradius = sunsize * 150
 	#acceptable radius list - cant be too big or too small, to fit graphically on system view
 	for i in range(200 + minradius, 3000, 200):
 		acceptableradiuslist.append(i)
@@ -226,10 +226,10 @@ func createsystem(namechoice):
 		var planetradius = 0
 		if rockyorgassy == 2 or rockyorgassy == 1:
 			rockyorgassy = "rocky"
-			planetradius = randf()*0.3 + 0.25
+			planetradius = randf()*0.3 + 0.2
 		elif rockyorgassy == 3:
 			rockyorgassy = "gassy"
-			planetradius = randf()*0.4 + 0.5
+			planetradius = randf()*0.475 + 0.4
 		var planethabitable = false
 		if rockyorgassy == "rocky":
 			if planettemperature > 240:
