@@ -226,10 +226,10 @@ func createsystem(namechoice):
 		var planetradius = 0
 		if rockyorgassy == 2 or rockyorgassy == 1:
 			rockyorgassy = "rocky"
-			planetradius = randf()*0.3 + 0.2
+			planetradius = randf()*0.3 + 0.25
 		elif rockyorgassy == 3:
 			rockyorgassy = "gassy"
-			planetradius = randf()*0.475 + 0.4
+			planetradius = randf()*0.4 + 0.5
 		var planethabitable = false
 		if rockyorgassy == "rocky":
 			if planettemperature > 240:

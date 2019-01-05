@@ -191,7 +191,7 @@ func _generatesystem(systemdict):
 		mat.set_shader_param("suncolor", Vector3(0.9, 0.9, 0.9))
 		mat.set_shader_param("secondsuncolor", Vector3(0.8, 0.8, 0.8))
 	#change sprite size based on sun size
-	sunsprite.scale = Vector2(systemdict["sunsize"] * 1.2, systemdict["sunsize"] * 1.2)
+	sunsprite.scale = Vector2(systemdict["sunsize"] * 2.0, systemdict["sunsize"] * 2.0)
 	# 0, 0 is centre of system
 	sunsprite.position.x = 0
 	sunsprite.position.y = 0
