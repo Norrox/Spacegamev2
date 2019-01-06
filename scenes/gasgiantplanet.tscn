@@ -50,7 +50,6 @@ func _ready():
 
 [sub_resource type="CircleShape2D" id=2]
 
-custom_solver_bias = 0.0
 radius = 274.156
 
 [sub_resource type="Shader" id=3]
@@ -159,7 +158,6 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=4]
 
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource( 3 )
 shader_param/seed1 = 22345.9
 shader_param/sealevel = 0.006
@@ -175,7 +173,6 @@ shader_param/outerG = 3.964
 shader_param/outerB = 1.057
 shader_param/PI = 3.142
 shader_param/lightDir = Vector3( -0.8, -0.8, 0.5 )
-_sections_unfolded = [ "Resource", "shader", "shader_param", "shader_param/texture1" ]
 
 [sub_resource type="OpenSimplexNoise" id=5]
 
@@ -187,29 +184,19 @@ lacunarity = 4.0
 
 [sub_resource type="NoiseTexture" id=6]
 
-flags = 7
-size = Vector2( 200, 200 )
 seamless = true
-as_normalmap = false
 noise = SubResource( 5 )
-_sections_unfolded = [ "Flags", "noise" ]
 
 [node name="planet" type="Node2D"]
 script = SubResource( 1 )
-_sections_unfolded = [ "Script", "Transform" ]
 
 [node name="gravity" type="Area2D" parent="."]
-input_pickable = true
 space_override = 1
 gravity_point = true
 gravity_distance_scale = 0.000885108
-gravity_vec = Vector2( 0, 1 )
 gravity = 100.0
 linear_damp = 0.0
 angular_damp = 0.0
-audio_bus_override = false
-audio_bus_name = "Master"
-_sections_unfolded = [ "Collision", "Pickable" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="gravity"]
 visible = false
@@ -219,5 +206,4 @@ shape = SubResource( 2 )
 modulate = Color( 1, 0.992157, 0.992157, 1 )
 material = SubResource( 4 )
 texture = SubResource( 6 )
-_sections_unfolded = [ "Animation", "Material", "Offset", "Transform", "material", "normal_map", "texture" ]
 

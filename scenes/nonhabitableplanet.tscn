@@ -59,6 +59,8 @@ code = "shader_type canvas_item;
 render_mode blend_premul_alpha;
 uniform float PI = 3.141592653589793238462643383;
 uniform vec3 lightDir = vec3(-0.8, -0.8, 0.5);
+uniform float circlesizepercent = 50.0;
+uniform float border = 0.05;
 
 void fragment() {
 	float theta = UV.y * 3.14159;
@@ -77,11 +79,11 @@ void fragment() {
 	vec2 texCoords = vec2(0.5 + atan(normal.x, normal.z) / (2.0*PI) + rot, asin(normal.y) / PI - 0.5);
 	vec3 texColor = texture(TEXTURE, texCoords).xyz;
 	vec3 lightColor = vec3(ndotl) * texColor * 1.5;
-	vec4 inside = vec4(lightColor, 1.0);
 	vec4 outside = vec4(0.0, 0.0, 0.0, 0.0);
+	vec4 inside = vec4(lightColor, 1.0);
 	if (radius >= 1.0)
 		COLOR.rgba = outside;
-  	else
+ 	else
 		COLOR.rgba = inside;
 }
 
@@ -93,6 +95,8 @@ resource_local_to_scene = true
 shader = SubResource( 3 )
 shader_param/PI = 3.14159
 shader_param/lightDir = Vector3( 0.1, 0, 0.1 )
+shader_param/circlesizepercent = 50.0
+shader_param/border = 0.05
 
 [sub_resource type="OpenSimplexNoise" id=5]
 
@@ -104,13 +108,12 @@ lacunarity = 4.0
 
 [sub_resource type="NoiseTexture" id=6]
 
-flags = 6
 seamless = true
 noise = SubResource( 5 )
 
 [sub_resource type="CircleShape2D" id=7]
 
-radius = 46.9219
+radius = 113.707
 
 [node name="planet" type="Node2D"]
 script = SubResource( 1 )
