@@ -8,6 +8,8 @@ var screensize
 var max_speed = 500
 var exhaust_length = 0
 var max_exhaust_length = 10
+var combatstatus = false
+var playership = true
 
 
 func _ready():
@@ -42,16 +44,17 @@ func _integrate_forces(state):
 	#apply rotational force
 	set_applied_torque(rotation_dir * spinthrust)
 	#edge wrapping, teleport to other side of map
-	var xform = state.transform
-	if xform.origin.x > 10000:
-		xform.origin.x = 0
-	if xform.origin.x < 0:
-		xform.origin.x = 10000
-	if xform.origin.y > 6250:
-		xform.origin.y = 0
-	if xform.origin.y < 0:
-		xform.origin.y = 6250
-	state.transform = xform
+	if combatstatus == true:
+		var xform = state.transform
+		if xform.origin.x > 10000:
+			xform.origin.x = 0
+		if xform.origin.x < 0:
+			xform.origin.x = 10000
+		if xform.origin.y > 6250:
+			xform.origin.y = 0
+		if xform.origin.y < 0:
+			xform.origin.y = 6250
+		state.transform = xform
 
 
 func _on_Area2D_area_entered(area):
