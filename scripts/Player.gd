@@ -67,3 +67,11 @@ func _on_Area2D_area_entered(area):
 	else:
 		return
 	
+
+
+func _on_solarsystem_combat_signal():
+	combatstatus = true
+
+
+func _on_solarsystem_leave_combat():
+	combatstatus = false

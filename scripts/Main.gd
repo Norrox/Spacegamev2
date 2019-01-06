@@ -127,11 +127,6 @@ func _input(event):
 	if event.is_action("zoomout") and event.is_pressed() and not event.is_echo():
 		camera.zoom = Vector2(camera.zoom.x * 1.5, camera.zoom.y * 1.5)
 		minimapsection.scale = Vector2(minimapsection.scale.x * 1.5, minimapsection.scale.y * 1.5)
-	if event.is_action("ui_cancel") and event.is_pressed() and not event.is_echo():
-		if $viewportcontainer/viewport.has_node("solarsystem"):
-			_leavesolarsystem()
-		else:
-			return
 
 func loadWords():
 	#json reading helper function
