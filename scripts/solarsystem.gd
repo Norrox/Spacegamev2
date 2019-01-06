@@ -4,14 +4,18 @@ var systemdict
 var combatstatus = false
 signal combat_signal
 signal leave_combat
-# Called when the node enters the scene tree for the first time.
+onready var enemyship = preload("res://scenes/enemy.tscn")
+
 func _ready():
 	pass
 
 func _input(event):
 	if event.is_action("ui_focus_next") and event.is_pressed() and not event.is_echo():
+		var p = enemyship.instance()
+		add_child(p)
 		declarecombat()
-	if event.is_action("ui_focus_prev") and event.is_pressed() and not event.is_echo():
+	if event.is_action("ui_cancel") and event.is_pressed() and not event.is_echo():
+		$enemy.queue_free()
 		leavecombat()
 
 func declarecombat():
