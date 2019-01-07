@@ -50,7 +50,7 @@ func _ready():
 
 [sub_resource type="CircleShape2D" id=2]
 
-radius = 274.156
+radius = 549.32
 
 [sub_resource type="Shader" id=3]
 
@@ -193,13 +193,12 @@ script = SubResource( 1 )
 [node name="gravity" type="Area2D" parent="."]
 space_override = 1
 gravity_point = true
-gravity_distance_scale = 0.000885108
+gravity_distance_scale = 0.002
 gravity = 100.0
 linear_damp = 0.0
 angular_damp = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="gravity"]
-visible = false
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]

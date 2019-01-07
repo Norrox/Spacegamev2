@@ -102,7 +102,7 @@ func _generatesolarsystem(starchoice):
 	system.generatesystem(systemdict)
 	camerafollow = 1
 	camera.target = $viewportcontainer/viewport/solarsystem/player
-	camera.zoom = Vector2(1.5, 1.5)
+	camera.zoom = Vector2(2.5, 2.5)
 
 func _leavesolarsystem():
 	#when solar system is exited, return to universe scene and reset info
@@ -113,7 +113,6 @@ func _leavesolarsystem():
 	for x in $viewportcontainer/viewport/solarsystem/system.circlelist:
 		x.queue_free()
 	camera.zoom = Vector2(1.0, 1.0)
-	camera.target = null
 	get_node("viewportcontainer/viewport/solarsystem").queue_free()
 	$viewportcontainer/viewport.add_child(currentuniverse)
 	pointer = $viewportcontainer/viewport/universe/pointer
@@ -232,10 +231,10 @@ func createsystem(namechoice):
 					var ishabitable = randi()%2
 					if ishabitable == 1:
 						planethabitable = true
-		var seed1 = randi()% 5000
-		var period = randi() % 226 + 30
-		var persistence = randf()*0.6+0.4
-		var lacunarity = randf()*3.4 + 0.6
+		var seed1 = randi() % 5000
+		var period = randi() % 100 + 156
+		var persistence = randf() * 0.3 + 0.7
+		var lacunarity = randf() * 3.4 + 0.6
 		var resourceheatmultiplier = planettemperature / 273
 		var resourcesizemultiplier = resourceheatmultiplier
 		var totalresources = resourcesizemultiplier * (randi()%200)
@@ -275,6 +274,8 @@ func createsystem(namechoice):
 		var outerR = randf()*1.0 + 0.1
 		var outerG = randf()*1.0 + 0.1
 		var outerB = randf()*1.0 + 0.2
+		var planetgravity = planetradius * 500
+		system_dict[planetname + "planetgravity"] = planetgravity
 		system_dict[planetname + "planettemperature"] = planettemperature
 		system_dict[planetname + "planethabitable"] = planethabitable
 		system_dict[planetname + "orbitradius"] = orbitradius

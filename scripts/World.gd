@@ -56,6 +56,7 @@ func _populateuniversescene():
 		p.sunname = current_line["sunname"]
 		p.suntemperature = current_line["suntemperature"]
 		p.scale = Vector2(0.006 * current_line["sunsize"], 0.006 * current_line["sunsize"])
+		p.get_node("Area2D").gravity = (p.get_node("Area2D").gravity * current_line["sunsize"]) * 2
 		add_child(p)
 	universefile.close()
 

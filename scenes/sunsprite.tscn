@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://art/suns/sunframes/greystone003x500.png" type="Texture" id=1]
 [ext_resource path="res://scripts/sunsprite.gd" type="Script" id=2]
@@ -121,21 +121,33 @@ shader_param/secondsuncolor = Vector3( 1, 0.35, 0 )
 
 radius = 9847.81
 
+[sub_resource type="CircleShape2D" id=4]
+
+radius = 48.6514
+
 [node name="sunsprite" type="Sprite"]
 material = SubResource( 2 )
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Area2D" type="Area2D" parent="."]
-visible = false
-space_override = 1
+space_override = 2
 gravity_point = true
-gravity_distance_scale = 0.000885108
-gravity = 100.0
+gravity_distance_scale = 0.002
+gravity = 150.0
 linear_damp = 0.0
 angular_damp = 0.0
+priority = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 visible = false
 shape = SubResource( 3 )
+
+[node name="suncentre" type="Area2D" parent="."]
+gravity = 0.0
+linear_damp = 0.0
+angular_damp = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="suncentre"]
+shape = SubResource( 4 )
 

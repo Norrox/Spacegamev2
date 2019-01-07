@@ -259,6 +259,8 @@ func _generateplanets(systemdict):
 		var outerG = systemdict[outerGstring]
 		var outerBstring = str(planetname + "outerB")
 		var outerB = systemdict[outerBstring]
+		var gravitystring = str(planetname + "planetgravity")
+		var planetgravity = systemdict[gravitystring]
 		#rocky or gas giant
 		if rockyorgassy == "rocky":
 			p = nonhabitableplanet.instance()
@@ -269,6 +271,7 @@ func _generateplanets(systemdict):
 		p.orbitradius = orbitradius
 		p.rockyorgassy = rockyorgassy
 		p.scale = Vector2(planetradius, planetradius)
+		p.get_node("gravity").gravity = planetgravity * 80
 		p.planetradius = planetradius
 		#random point on its orbit
 		p.currentangle = randi() % 360

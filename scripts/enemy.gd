@@ -1,7 +1,7 @@
 extends RigidBody2D
 
-export (int) var enginethrust = 500
-export (int) var spinthrust = 800
+var enginethrust = 500
+var spinthrust = 2000
 
 var rotation_dir = 0
 var screensize
@@ -31,7 +31,7 @@ func aidecision(anglebetween, distancetoplayer):
 	randomize()
 	if distancetoplayer < 200:
 		engineon = 0
-	if anglebetween < 10 and anglebetween > -10:
+	elif anglebetween < 10 and anglebetween > -10:
 		engineon = 1
 	if anglebetween < 180 and anglebetween > 9:
 		rotation_dir += 1
