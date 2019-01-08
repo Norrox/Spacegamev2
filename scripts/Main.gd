@@ -132,7 +132,7 @@ func createsystem(namechoice):
 	var acceptableradiuslist = []
 	var minradius = sunsize * 170
 	#acceptable radius list - cant be too big or too small, to fit graphically on system view
-	for i in range(200 + minradius, 3000, 200):
+	for i in range(200 + minradius, 6000, 200):
 		acceptableradiuslist.append(i)
 	var curatedradiuslist = []
 	#make a new list that has space around each radius so planets arent too close together

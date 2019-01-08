@@ -26,7 +26,8 @@ var scanbool = false
 var resourcelist = []
 
 func _ready():
-	pass
+	for p in resourcelist:
+		p.hide()
 
 func _zoommap():
 	#zooms in the map when it opens as a slightly swish entrance
@@ -175,8 +176,6 @@ func _distributeminerals(planet):
 		p.hide()
 		p.position.x = planet.resourcelocationlist[x].x
 		p.position.y = planet.resourcelocationlist[x].y
-
-
 
 func _on_Tween_tween_completed(object, key):
 	#if planet has already been scanned previously

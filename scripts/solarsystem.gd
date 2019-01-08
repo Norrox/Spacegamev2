@@ -33,6 +33,8 @@ func _openlandedmenu(planetchoice):
 	var gui = get_node("/root/main/gui/")
 	gui._planetviewmode(planetchoice)
 	var p = planetchoice.get_parent().get_parent().storedlandedscene
+	for x in p.resourcelist:
+		x.hide()
 	get_node("/root/main/").add_child(p)
 	#call landedmenu function to distribute planets assigned resources
 	p._distributeminerals(planetchoice.get_parent().get_parent())

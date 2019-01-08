@@ -19,36 +19,41 @@ margin_right = 10000.0
 margin_bottom = 6250.0
 rect_scale = Vector2( 2, 2 )
 texture = ExtResource( 2 )
+expand = true
 
 [node name="system" type="Node2D" parent="."]
-position = Vector2( 5000, 3125 )
+position = Vector2( 10000, 6250 )
 script = ExtResource( 3 )
 
 [node name="topbar" type="Area2D" parent="system"]
-position = Vector2( 0, -3135 )
+position = Vector2( 0, -6250 )
+scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="system/topbar"]
 shape = SubResource( 1 )
 
 [node name="leftbar" type="Area2D" parent="system"]
-position = Vector2( -5010, 0 )
+position = Vector2( -10000, 0 )
 rotation = 1.5708
+scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="system/leftbar"]
 shape = SubResource( 1 )
 
 [node name="rightbar" type="Area2D" parent="system"]
-position = Vector2( 5010, 0 )
+position = Vector2( 10000, 0 )
 rotation = 1.5708
+scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="system/rightbar"]
 shape = SubResource( 1 )
 
 [node name="bottombar" type="Area2D" parent="system"]
-position = Vector2( 0, 3135 )
+position = Vector2( 0, 6250 )
+scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="system/bottombar"]
@@ -56,18 +61,18 @@ shape = SubResource( 1 )
 
 [node name="player" parent="." instance=ExtResource( 5 )]
 
-[connection signal="combat_signal" from="." to="." method="_on_solarsystem_combat_signal"]
-[connection signal="combat_signal" from="." to="system/leftbar" method="_on_solarsystem_combat_signal"]
-[connection signal="combat_signal" from="." to="system/topbar" method="_on_solarsystem_combat_signal"]
-[connection signal="combat_signal" from="." to="player" method="_on_solarsystem_combat_signal"]
 [connection signal="combat_signal" from="." to="system/bottombar" method="_on_solarsystem_combat_signal"]
 [connection signal="combat_signal" from="." to="system/rightbar" method="_on_solarsystem_combat_signal"]
-[connection signal="leave_combat" from="." to="." method="_on_solarsystem_leave_combat"]
-[connection signal="leave_combat" from="." to="system/leftbar" method="_on_solarsystem_leave_combat"]
-[connection signal="leave_combat" from="." to="system/topbar" method="_on_solarsystem_leave_combat"]
-[connection signal="leave_combat" from="." to="player" method="_on_solarsystem_leave_combat"]
+[connection signal="combat_signal" from="." to="system/topbar" method="_on_solarsystem_combat_signal"]
+[connection signal="combat_signal" from="." to="player" method="_on_solarsystem_combat_signal"]
+[connection signal="combat_signal" from="." to="." method="_on_solarsystem_combat_signal"]
+[connection signal="combat_signal" from="." to="system/leftbar" method="_on_solarsystem_combat_signal"]
 [connection signal="leave_combat" from="." to="system/bottombar" method="_on_solarsystem_leave_combat"]
 [connection signal="leave_combat" from="." to="system/rightbar" method="_on_solarsystem_leave_combat"]
+[connection signal="leave_combat" from="." to="system/topbar" method="_on_solarsystem_leave_combat"]
+[connection signal="leave_combat" from="." to="player" method="_on_solarsystem_leave_combat"]
+[connection signal="leave_combat" from="." to="." method="_on_solarsystem_leave_combat"]
+[connection signal="leave_combat" from="." to="system/leftbar" method="_on_solarsystem_leave_combat"]
 [connection signal="body_entered" from="system/topbar" to="." method="_on_topbar_body_entered"]
 [connection signal="body_entered" from="system/leftbar" to="." method="_on_leftbar_body_entered"]
 [connection signal="body_entered" from="system/rightbar" to="." method="_on_rightbar_body_entered"]

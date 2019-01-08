@@ -26,8 +26,8 @@ func _ready():
 	#put minimap rectangle of visible area in proportional position of where camera starts
 
 func _process(delta):
-	minimapsection.position.x = (camera.get_camera_screen_center().x * 0.0199)
-	minimapsection.position.y = (camera.get_camera_screen_center().y * 0.0204)
+	minimapsection.position.x = (camera.get_camera_screen_center().x * 0.00995)
+	minimapsection.position.y = (camera.get_camera_screen_center().y * 0.0102)
 	for x in baseplanetlist:
 		#change lighting direction shining on planet
 		var lightdirx = -0.3
@@ -64,8 +64,8 @@ func _process(delta):
 		mat.set_shader_param("lightDir", Vector3(lightdirx, lightdiry, 0.5))
 	for x in range(0, baseplanetlist.size()):
 		#change minimap dots for planets based on their updated position
-		var minimapx = (baseplanetlist[x].position.x / 50) + minimapcentre.get_global_position().x
-		var minimapy = (baseplanetlist[x].position.y / 50) + minimapcentre.get_global_position().y
+		var minimapx = (baseplanetlist[x].position.x / 100) + minimapcentre.get_global_position().x
+		var minimapy = (baseplanetlist[x].position.y / 100) + minimapcentre.get_global_position().y
 		minimapdotlist[x].position = Vector2(minimapx, minimapy)
 
 func _minimapdots():
@@ -73,7 +73,7 @@ func _minimapdots():
 	get_node("/root/main/gui/minimap").show()
 	minimapcentre = get_node("/root/main/gui/minimapcentre")
 	#change size of minimap dot for the sun based on the suns size
-	var centredotscale = 0.02 * (currentstar.sunsize)
+	var centredotscale = 0.01 * (currentstar.sunsize)
 	#change colour of minimap dot based on sun type
 	if currentstar.suntype == 1:
 		minimapcentre.texture = load("res://art/suns/sunred.png")
@@ -103,15 +103,15 @@ func _minimapdots():
 			p = bluecircle.instance()
 			circlelist.append(p)
 			get_node("/root/main/").add_child(p)
-		var y = x.orbitradius * 0.000040
+		var y = x.orbitradius * 0.000020
 		p.global_position = minimapcentre.global_position
 		p.scale = Vector2(y, y)
 		#add planet dots
 		var i = minimapdotwhite.instance()
 		get_node("/root/main").add_child(i)
 		i.scale = Vector2(0.01, 0.01)
-		var minimapx = (x.position.x / 50) + minimapcentre.get_global_position().x
-		var minimapy = (x.position.y / 50) + minimapcentre.get_global_position().y
+		var minimapx = (x.position.x / 100) + minimapcentre.get_global_position().x
+		var minimapy = (x.position.y / 100) + minimapcentre.get_global_position().y
 		i.position = Vector2(minimapx, minimapy)
 		minimapdotlist.append(i)
 	#have now visited this star system
