@@ -6,7 +6,6 @@ onready var starnamelabel = $gui/starname
 onready var coordlabel = $gui/coords
 onready var solarsystem = preload("res://scenes/solarsystem.tscn")
 onready var minimapsection = get_node("/root/main/gui/minimap/minimapsection")
-onready var landedmenu = preload("res://scenes/landedmenu.tscn")
 onready var universescene = preload("res://scenes/Universe.tscn")
 var globeview
 var camerafollow = 1
@@ -24,7 +23,7 @@ func _process(delta):
 
 func _ready():
 	#hide gui minimap - not needed yet
-	$gui/minimap.hide()
+	$gui._universeviewmode()
 	#populate universe database, generate all data for all systems
 	createuniverse()
 	#instance the universe view
@@ -34,62 +33,6 @@ func _ready():
 	currentuniverse = newuniverse
 	camera.target = pointer
 
-
-func _openlandedmenu(planetchoice):
-	#called when colliding with planet - should be moved out of main probably
-	var p = landedmenu.instance()
-	p.currentplanet = planetchoice.get_parent().get_parent()
-	#set planet map view to same noise texture as system sphere
-	var noisetex = NoiseTexture.new()
-	noisetex.set_height(700)
-	noisetex.set_width(1100)
-	noisetex.set_seamless(true)
-	var simplenoise = OpenSimplexNoise.new()
-	simplenoise.seed = p.currentplanet.seed1
-	simplenoise.period = p.currentplanet.period
-	simplenoise.persistence = p.currentplanet.persistence
-	simplenoise.set_lacunarity(p.currentplanet.lacunarity)
-	noisetex.set_noise(simplenoise)
-	var planetsprite = p.currentplanet.get_node("Sprite")
-	var planet = planetchoice.get_parent().get_parent()
-	var colorchoice = p.currentplanet.colorchoice
-	p.get_node("Sprite").set_modulate(colorchoice)
-	p.get_node("Sprite").texture = noisetex
-	p.get_node("Sprite/scanline").set_modulate(Color(1, 1, 1))
-	add_child(p)
-	#call landedmenu function to distribute planets assigned resources
-	p._distributeminerals(planetchoice.get_parent().get_parent())
-	#make the map zoom in as the menu appears
-	p._zoommap()
-	#show menu controls
-	$gui/scan.show()
-	$gui/land.show()
-	$gui/leave.show()
-	#set info text
-	$gui/planetname.text = str(planetchoice.get_parent().get_parent().planetname)
-	$gui/planettemp.text = "Temp: " + str(int(planetchoice.get_parent().get_parent().planettemperature)) + " K / " + str(int(planetchoice.get_parent().get_parent().planettemperature) - 273) + " C"
-	#create a view of the planet sprite sphere in bottom right
-	globeview = planetsprite.duplicate()
-	globeview.position = Vector2(1200, 635)
-	var globesize = globeview.texture.get_size()
-	if globesize.x > 200 or globesize.y > 125:
-		globeview.scale = Vector2(globeview.scale.x * 0.45, globeview.scale.y * 0.45)
-	globeview.z_index = 2
-	$gui/ColorRect.show()
-	add_child(globeview)
-	get_tree().paused = true
-	
-func _closelandedmenu():
-	#close the landed menu and reset info boxes
-	globeview.queue_free()
-	$gui/ColorRect.hide()
-	get_tree().paused = false
-	$landedmenu.queue_free()
-	$gui/planetname.text = ""
-	$gui/planettemp.text = ""
-	var planetguiboxes = get_tree().get_nodes_in_group("planettext")
-	for x in planetguiboxes:
-		x.hide()
 
 func _generatesolarsystem(starchoice):
 	#when solar system selected, instance that scene
@@ -104,19 +47,6 @@ func _generatesolarsystem(starchoice):
 	camera.target = $viewportcontainer/viewport/solarsystem/player
 	camera.zoom = Vector2(2.5, 2.5)
 
-func _leavesolarsystem():
-	#when solar system is exited, return to universe scene and reset info
-	$gui/minimap.hide()
-	$gui/minimapcentre.hide()
-	for x in $viewportcontainer/viewport/solarsystem/system.minimapdotlist:
-		x.queue_free()
-	for x in $viewportcontainer/viewport/solarsystem/system.circlelist:
-		x.queue_free()
-	camera.zoom = Vector2(1.0, 1.0)
-	get_node("viewportcontainer/viewport/solarsystem").queue_free()
-	$viewportcontainer/viewport.add_child(currentuniverse)
-	pointer = $viewportcontainer/viewport/universe/pointer
-	camera.target = pointer
 
 func _input(event):
 	#control input for universe scene, shouldbe moved out of main

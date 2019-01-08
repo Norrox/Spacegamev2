@@ -72,7 +72,7 @@ func _on_Area2D_area_entered(area):
 	if combatstatus == false:
 		if "landableplanet" in area:
 			if area.landableplanet == true:
-				get_node("/root/main")._openlandedmenu(area)
+				get_parent()._openlandedmenu(area)
 			else:
 				return
 		else:

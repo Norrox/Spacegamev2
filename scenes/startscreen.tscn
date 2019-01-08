@@ -20,6 +20,6 @@ modulate = Color( 0.0156863, 0.0156863, 0.0156863, 1 )
 show_behind_parent = true
 margin_left = -607.0
 margin_top = -308.0
-margin_right = 693.0
-margin_bottom = 392.0
+margin_right = 759.0
+margin_bottom = 460.0
 

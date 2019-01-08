@@ -20,7 +20,6 @@ __meta__ = {
 }
 
 [node name="pointer" type="Area2D" parent="."]
-position = Vector2( 10, 10 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -57,7 +56,7 @@ invert_enable = true
 invert_border = 2.0
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-polygon = PoolVector2Array( 1, 1, 1099, 1, 1099, 699, 1, 699 )
+polygon = PoolVector2Array( 1, 1, 1165, 1, 1165, 767, 1, 767 )
 antialiased = true
 invert_enable = true
 invert_border = 1.0

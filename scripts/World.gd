@@ -63,10 +63,11 @@ func _populateuniversescene():
 func _input(event):
    # Mouse in viewport coordinates
 	if event is InputEventMouseButton and event.is_pressed() and not event.is_echo():
-		if get_global_mouse_position().x < 0 or get_global_mouse_position().y < 0:
+		if get_viewport().get_mouse_position().x < 0 or get_viewport().get_mouse_position().y < 0:
 			return
 		else:
-			pointer.global_position = get_global_mouse_position()
+			pointer.global_position = event.global_position + get_global_transform().get_origin()
+			print(event.position)
 			if mousesystem != null:
 				_highlightsystem(mousesystem.global_position, mousesystem.sunname)
 		var xstring = var2str(pointer.position.x)
@@ -91,6 +92,7 @@ func _unhighlightsystem():
 	starnamelabel.set_text("")
 
 func _process(delta):
+	pointer.global_position = get_viewport().get_mouse_position()
 	if holdmovement > 0:
 		holdmovement -= 1
 

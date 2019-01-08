@@ -4,15 +4,15 @@
 [ext_resource path="res://art/sprites/sheet.playerShip2_orange.atlastex" type="Texture" id=2]
 [ext_resource path="res://scenes/exhaust.tscn" type="PackedScene" id=3]
 
+[sub_resource type="CircleShape2D" id=1]
+
+radius = 12.8189
+
 [sub_resource type="CircleShape2D" id=2]
 
 radius = 12.8189
 
-[sub_resource type="CircleShape2D" id=3]
-
-radius = 12.8189
-
-[sub_resource type="Gradient" id=4]
+[sub_resource type="Gradient" id=3]
 
 offsets = PoolRealArray( 0, 0.096, 0.237, 0.404, 0.509, 0.574803, 0.632, 0.763, 0.866142, 1 )
 colors = PoolColorArray( 0.988281, 0.212326, 0.212326, 0.480667, 0.968627, 0.196078, 0.196078, 0.734824, 0.972549, 0.113725, 0.113725, 0.817686, 0.984314, 0.0235294, 0.0235294, 0.823216, 0.976563, 0.0267029, 0.0267029, 1, 0.976471, 0.137255, 0.137255, 0.77349, 0.972656, 0.296356, 0.296356, 0.679569, 0.968627, 0.321569, 0.321569, 0.580118, 0.976563, 0.461578, 0.461578, 0.839765, 1, 1, 1, 0.862745 )
@@ -35,15 +35,15 @@ texture = ExtResource( 2 )
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 
 [node name="exhaust" parent="." instance=ExtResource( 3 )]
 show_behind_parent = true
 width = 2.0
-gradient = SubResource( 4 )
+gradient = SubResource( 3 )
 texture_mode = 1
 targetPath = NodePath("../Position2D")
 

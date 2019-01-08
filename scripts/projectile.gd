@@ -18,11 +18,6 @@ func _integrate_forces(state):
 		queue_free()
 	state.transform = xform
 
-func _on_sundetection_area_entered(area):
-	if area.name == "suncentre":
-		queue_free()
-	else:
-		pass
 
 
 func _on_Timer_timeout():
