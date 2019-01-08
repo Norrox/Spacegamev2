@@ -46,7 +46,7 @@ func _generatesolarsystem(starchoice):
 	camerafollow = 1
 	camera.target = $viewportcontainer/viewport/solarsystem/player
 	camera.zoom = Vector2(2.5, 2.5)
-
+	
 
 func _input(event):
 	#control input for universe scene, shouldbe moved out of main
@@ -130,7 +130,7 @@ func createsystem(namechoice):
 		"sunpositiony" : sunpositiony,
 	}
 	var acceptableradiuslist = []
-	var minradius = sunsize * 150
+	var minradius = sunsize * 170
 	#acceptable radius list - cant be too big or too small, to fit graphically on system view
 	for i in range(200 + minradius, 3000, 200):
 		acceptableradiuslist.append(i)
@@ -161,10 +161,10 @@ func createsystem(namechoice):
 					var ishabitable = randi()%2
 					if ishabitable == 1:
 						planethabitable = true
-		var seed1 = randi() % 5000
-		var period = randi() % 100 + 156
-		var persistence = randf() * 0.3 + 0.7
-		var lacunarity = randf() * 3.4 + 0.6
+		var seed1 = randi()%5000
+		var period = randi()%156 + 99
+		var persistence = randf()*0.5 + 0.49
+		var lacunarity = randf()*3.4 + 0.59
 		var resourceheatmultiplier = planettemperature / 273
 		var resourcesizemultiplier = resourceheatmultiplier
 		var totalresources = resourcesizemultiplier * (randi()%200)

@@ -19,6 +19,7 @@ colors = PoolColorArray( 0.988281, 0.212326, 0.212326, 0.480667, 0.968627, 0.196
 
 [node name="Player" type="RigidBody2D"]
 position = Vector2( 100, 100 )
+gravity_scale = 5.0
 linear_damp = 0.1
 angular_damp = 5.0
 applied_torque = 2.0

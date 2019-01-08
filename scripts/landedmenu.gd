@@ -24,21 +24,9 @@ var scanlinegroup = []
 var freezecontrols = false
 var scanbool = false
 var resourcelist = []
+
 func _ready():
-	#set menu selection to default, set info boxes to default
-	selection = 1
-	get_parent().get_node("gui/scan").color = Color(0.2, 0.3, 0.37)
-	get_parent().get_node("gui/land").color = Color(0.03, 0.03, 0.03)
-	get_parent().get_node("gui/leave").color = Color(0.03, 0.03, 0.03)
-	var planetguiboxes = get_tree().get_nodes_in_group("planettext")
-	for x in planetguiboxes:
-		x.show()
-	get_parent().get_node("gui/common").text = "Common : "
-	get_parent().get_node("gui/metals").text = "Metal : "
-	get_parent().get_node("gui/uncommon").text = "Uncommon : "
-	get_parent().get_node("gui/precious").text = "Precious : "
-	get_parent().get_node("gui/radioactive").text = "Radioactive : "
-	get_parent().get_node("gui/exotic").text = "Exotic : "
+	pass
 
 func _zoommap():
 	#zooms in the map when it opens as a slightly swish entrance
@@ -154,7 +142,7 @@ func _leave():
 	currentplanet.get_node("Sprite/landing").landableplanet = false
 	#add a collisiontimer so that you cant immediately re-collide with planet after leaving
 	currentplanet.get_node("collisiontimer").start()
-	get_parent()._closelandedmenu()
+	get_node("/root/main/viewportcontainer/viewport/solarsystem/")._closelandedmenu(currentplanet)
 	
 func _distributeminerals(planet):
 	#called before menu visible, resources are added, but invisible until scanned

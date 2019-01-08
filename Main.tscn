@@ -34,5 +34,5 @@ position = Vector2( 1166, 0 )
 z_index = 1
 
 [node name="minimapcentre" type="Sprite" parent="gui"]
-position = Vector2( 100, 637.5 )
+position = Vector2( 100, 705.5 )
 

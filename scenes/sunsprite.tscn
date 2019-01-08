@@ -133,17 +133,18 @@ script = ExtResource( 2 )
 [node name="Area2D" type="Area2D" parent="."]
 space_override = 2
 gravity_point = true
-gravity_distance_scale = 0.002
-gravity = 150.0
+gravity_distance_scale = 0.008
+gravity_vec = Vector2( 0, 0 )
+gravity = 396.387
 linear_damp = 0.0
 angular_damp = 0.0
 priority = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
 shape = SubResource( 3 )
 
 [node name="suncentre" type="Area2D" parent="."]
+visible = false
 gravity = 0.0
 linear_damp = 0.0
 angular_damp = 0.0

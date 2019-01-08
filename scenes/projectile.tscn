@@ -30,7 +30,7 @@ hue_variation_random = 0.56
 
 [node name="projectile" type="RigidBody2D"]
 mass = 0.08
-gravity_scale = 20.58
+gravity_scale = 15.0
 can_sleep = false
 script = ExtResource( 1 )
 

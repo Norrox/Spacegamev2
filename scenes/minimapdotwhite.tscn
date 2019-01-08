@@ -6,7 +6,6 @@
 pause_mode = 2
 position = Vector2( 653.186, 194.46 )
 scale = Vector2( 0.05, 0.05 )
-z_index = 1
+z_index = 3
 texture = ExtResource( 1 )
-_sections_unfolded = [ "Collision", "Pause", "Script", "Transform", "Z Index" ]
 

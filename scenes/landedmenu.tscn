@@ -5,18 +5,17 @@
 
 [sub_resource type="OpenSimplexNoise" id=1]
 
-resource_local_to_scene = true
 seed = 5000
 octaves = 6
-period = 62.3
-persistence = 0.901
+period = 89.7
+persistence = 0.517
 lacunarity = 4.0
 
 [sub_resource type="NoiseTexture" id=2]
 
-resource_local_to_scene = true
-width = 1100
-height = 700
+flags = 0
+width = 1166
+height = 768
 seamless = true
 noise = SubResource( 1 )
 
@@ -30,9 +29,9 @@ centered = false
 
 [node name="scanline" type="Sprite" parent="Sprite"]
 position = Vector2( 0, -50 )
+scale = Vector2( 1.06168, 1 )
 texture = ExtResource( 2 )
 centered = false
 
 [node name="Tween" type="Tween" parent="."]
 
-[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]
