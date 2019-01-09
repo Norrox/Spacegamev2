@@ -52,7 +52,7 @@ func _ready():
 
 [sub_resource type="CircleShape2D" id=2]
 
-radius = 10250.3
+radius = 1632.83
 
 [sub_resource type="Shader" id=3]
 
@@ -125,7 +125,7 @@ __meta__ = {
 [node name="gravity" type="Area2D" parent="."]
 space_override = 1
 gravity_point = true
-gravity_distance_scale = 0.008
+gravity_distance_scale = 0.007
 gravity_vec = Vector2( 0, 0 )
 gravity = 100.0
 linear_damp = 0.0

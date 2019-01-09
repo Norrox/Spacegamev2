@@ -271,7 +271,8 @@ func _generateplanets(systemdict):
 		p.orbitradius = orbitradius
 		p.rockyorgassy = rockyorgassy
 		p.scale = Vector2(planetradius, planetradius)
-		p.get_node("gravity").gravity = planetgravity * 3
+		p.get_node("gravity").gravity = planetgravity
+		print(planetgravity * 3)
 		p.planetradius = planetradius
 		#random point on its orbit
 		p.currentangle = randi() % 360

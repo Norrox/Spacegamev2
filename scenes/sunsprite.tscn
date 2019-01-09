@@ -119,7 +119,7 @@ shader_param/secondsuncolor = Vector3( 1, 0.35, 0 )
 
 [sub_resource type="CircleShape2D" id=3]
 
-radius = 9847.81
+radius = 6257.18
 
 [sub_resource type="CircleShape2D" id=4]
 
@@ -131,9 +131,9 @@ texture = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Area2D" type="Area2D" parent="."]
-space_override = 2
+space_override = 1
 gravity_point = true
-gravity_distance_scale = 0.008
+gravity_distance_scale = 0.007
 gravity_vec = Vector2( 0, 0 )
 gravity = 396.387
 linear_damp = 0.0
